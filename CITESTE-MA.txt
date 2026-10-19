@@ -1,0 +1,25 @@
+# Atelier Auto — prototip 0.1
+
+Aplicație web demonstrativă în limba română pentru evidența vehiculelor și procedurilor tehnice.
+
+## Ce funcționează
+- Căutare în procedurile introduse în aplicație.
+- Adăugare, editare și ștergere fișe de vehicul.
+- Adăugare, editare și ștergere proceduri / cupluri.
+- Stare de verificare și câmp pentru sursa tehnică.
+- Interfață adaptată pentru ecran de calculator și telefon.
+
+## Limitări importante
+- Nu conține o bază de date completă de cupluri sau proceduri auto.
+- Nu este conectată la Autodata sau la altă bază comercială.
+- Salvează datele în browserul dispozitivului curent (localStorage); datele NU se sincronizează între iPhone și calculator.
+- Pentru utilizare reală online pe mai multe dispozitive trebuie configurat un backend securizat și o bază de date găzduită, plus autentificarea și găzduirea web. Acestea necesită un cont de găzduire și configurarea credențialelor.
+- Nu folosi date neverificate la reparații. Copierea automată a bazelor comerciale fără licență nu este permisă.
+
+## Deschidere rapidă
+1. Dezarhivează pachetul.
+2. Deschide `index.html` în Chrome, Edge sau Safari.
+3. Folosește filele Vehicule și Proceduri pentru a introduce datele tale.
+
+## Publicare online
+Fișierul poate fi găzduit ca site static printr-un serviciu de găzduire web. Pentru ca datele să fie comune pe toate dispozitivele, următoarea versiune trebuie conectată la o bază de date online cu autentificare. Nu publica date de client sau informații sensibile în această versiune demonstrativă.

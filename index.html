@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#14243a">
+<title>Atelier Auto — Date tehnice</title>
+<style>
+:root{--navy:#14243a;--blue:#2458a6;--bg:#f3f6fa;--line:#dce3ed;--muted:#637188;--white:#fff;--orange:#a85a10}
+*{box-sizing:border-box}body{margin:0;font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:#172337}
+header{background:var(--navy);color:white;padding:20px max(18px,calc((100% - 1180px)/2));display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.brand{font-size:22px;font-weight:800;letter-spacing:.2px}.sub{color:#c6d4e8;font-size:13px}.status{border:1px solid #61738c;border-radius:99px;padding:5px 10px;font-size:12px}
+main{max-width:1180px;margin:22px auto;padding:0 16px}.notice{background:#fff6e9;border:1px solid #f0d4ae;color:#70400d;padding:12px 14px;border-radius:12px;margin-bottom:18px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.tab{border:1px solid var(--line);background:white;border-radius:10px;padding:10px 14px;cursor:pointer;font-weight:650}.tab.active{background:var(--blue);color:white;border-color:var(--blue)}
+.layout{display:grid;grid-template-columns: minmax(0,1.1fr) minmax(280px,.9fr);gap:16px}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 3px 12px #14243a08}.card h2{font-size:18px;margin:0 0 14px}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field{display:flex;flex-direction:column;gap:5px}.field.full{grid-column:1/-1}label{font-size:13px;font-weight:700;color:#42516a}input,select,textarea{font:inherit;border:1px solid #cbd5e1;border-radius:9px;padding:10px;background:#fff;min-width:0;width:100%}textarea{min-height:80px;resize:vertical}.btn{border:0;border-radius:10px;padding:11px 15px;background:var(--blue);color:white;font-weight:750;cursor:pointer}.btn.secondary{background:#eaf0f8;color:#203650}.btn.danger{background:#a83232}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.muted{color:var(--muted);font-size:13px}.result{border:1px solid var(--line);padding:13px;border-radius:12px;margin-top:10px}.result h3{font-size:16px;margin:0 0 5px}.tag{display:inline-block;font-size:11px;padding:3px 8px;border-radius:99px;background:#fff1dc;color:#814b0e;font-weight:800}.tag.ok{background:#e3f6e9;color:#17643b}.list{display:flex;flex-direction:column;gap:8px}.empty{padding:22px;text-align:center;color:var(--muted);border:1px dashed #cbd5e1;border-radius:12px}.hidden{display:none!important}.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}.stat{background:white;border:1px solid var(--line);border-radius:12px;padding:13px}.stat b{font-size:23px;display:block}.smallbtn{font-size:12px;padding:6px 9px}.footer{padding:24px 4px;color:var(--muted);font-size:12px}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.fields{grid-template-columns:1fr}.statrow{grid-template-columns:1fr 1fr}header{align-items:flex-start}.brand{font-size:20px}}
+</style>
+</head>
+<body>
+<header><div><div class="brand">🔧 Atelier Auto</div><div class="sub">Fișe tehnice · reparații · cupluri de strângere</div></div><span class="status">Prototip inițial · date demonstrative</span></header>
+<main>
+<div class="notice"><b>Important:</b> acest prototip nu este conectat încă la o bază de date tehnică oficială. Nu folosi valori neverificate la reparații. Înregistrările introduse aici sunt salvate în acest browser, nu se sincronizează încă între calculator și iPhone.</div>
+<div class="statrow"><div class="stat"><b id="vehicleCount">0</b><span class="muted">Vehicule salvate</span></div><div class="stat"><b id="procedureCount">0</b><span class="muted">Proceduri salvate</span></div><div class="stat"><b id="verifiedCount">0</b><span class="muted">Proceduri verificate</span></div></div>
+<div class="tabs">
+<button class="tab active" data-tab="search">Căutare tehnică</button><button class="tab" data-tab="vehicles">Vehicule</button><button class="tab" data-tab="procedures">Proceduri și cupluri</button><button class="tab" data-tab="sources">Surse și verificare</button>
+</div>
+<section id="search" class="panel">
+<div class="layout">
+<div class="card"><h2>Caută după vehicul</h2><div class="fields">
+<div class="field"><label for="qMake">Marcă</label><input id="qMake" placeholder="ex. Audi, BMW, Ford"></div>
+<div class="field"><label for="qModel">Model</label><input id="qModel" placeholder="ex. A3, Golf, Focus"></div>
+<div class="field"><label for="qYear">An</label><input id="qYear" placeholder="ex. 2008"></div>
+<div class="field"><label for="qEngine">Cod motor</label><input id="qEngine" placeholder="ex. BMM"></div>
+<div class="field full"><label for="qTerm">Operație / subiect</label><input id="qTerm" placeholder="ex. chiulasă, distribuție, injector"></div>
+</div><div class="actions"><button class="btn" id="searchBtn">Caută în fișele salvate</button><button class="btn secondary" id="clearSearch">Resetează</button></div><p class="muted">Căutarea acoperă doar fișele pe care le-ai introdus sau importat în acest prototip.</p></div>
+<div class="card"><h2>Rezultatele căutării</h2><div id="searchResults" class="list"><div class="empty">Introdu un criteriu și apasă „Caută”.</div></div></div>
+</div>
+</section>
+<section id="vehicles" class="panel hidden">
+<div class="layout">
+<div class="card"><h2>Adaugă / editează vehicul</h2><form id="vehicleForm"><input type="hidden" id="vehicleId"><div class="fields">
+<div class="field"><label for="make">Marcă *</label><input id="make" required placeholder="Audi"></div><div class="field"><label for="model">Model *</label><input id="model" required placeholder="A3"></div>
+<div class="field"><label for="year">An fabricație</label><input id="year" type="number" min="1950" max="2035" placeholder="2008"></div><div class="field"><label for="engine">Cod motor</label><input id="engine" placeholder="BMM"></div>
+<div class="field"><label for="power">Putere (CP)</label><input id="power" placeholder="140"></div><div class="field"><label for="transmission">Cutie de viteze</label><input id="transmission" placeholder="DSG6 / manuală"></div>
+<div class="field full"><label for="vin">VIN (opțional)</label><input id="vin" maxlength="17" placeholder="17 caractere"></div>
+<div class="field full"><label for="vehicleNotes">Note</label><textarea id="vehicleNotes" placeholder="Variantă, cod cutie, piață..."></textarea></div></div><div class="actions"><button class="btn" type="submit">Salvează vehiculul</button><button class="btn secondary" type="button" id="resetVehicle">Curăță formularul</button></div></form></div>
+<div class="card"><h2>Vehicule salvate</h2><div id="vehicleList" class="list"></div></div>
+</div>
+</section>
+<section id="procedures" class="panel hidden">
+<div class="layout">
+<div class="card"><h2>Adaugă procedură tehnică</h2><form id="procedureForm"><input type="hidden" id="procedureId"><div class="fields">
+<div class="field"><label for="pMake">Marcă *</label><input id="pMake" required placeholder="Audi"></div><div class="field"><label for="pModel">Model *</label><input id="pModel" required placeholder="A3"></div>
+<div class="field"><label for="pYear">An</label><input id="pYear" placeholder="2008"></div><div class="field"><label for="pEngine">Cod motor / cutie</label><input id="pEngine" placeholder="BMM"></div>
+<div class="field full"><label for="pTitle">Operație *</label><input id="pTitle" required placeholder="Montare chiulasă"></div>
+<div class="field"><label for="pTorque">Cuplu (Nm)</label><input id="pTorque" placeholder="Se completează numai din sursă"></div><div class="field"><label for="pAngle">Unghi (grade)</label><input id="pAngle" placeholder="ex. +90°, dacă e documentat"></div>
+<div class="field full"><label for="pSteps">Pași / ordine de strângere</label><textarea id="pSteps" placeholder="Descrie pașii; atașarea schemelor va fi adăugată într-o versiune ulterioară."></textarea></div>
+<div class="field full"><label for="pSource">Sursa exactă *</label><input id="pSource" required placeholder="Producător, manual, document/pagină sau URL"></div>
+<div class="field full"><label for="pStatus">Stare verificare</label><select id="pStatus"><option value="unverified">Neverificat — nu folosi la reparație</option><option value="verified">Verificat din sursă autorizată</option></select></div>
+<div class="field full"><label for="pNotes">Condiții / note</label><textarea id="pNotes" placeholder="Șuruburi noi, ungere, succesiune, excepții..."></textarea></div></div><div class="actions"><button class="btn" type="submit">Salvează procedura</button><button class="btn secondary" type="button" id="resetProcedure">Curăță formularul</button></div></form></div>
+<div class="card"><h2>Proceduri salvate</h2><div id="procedureList" class="list"></div></div>
+</div>
+</section>
+<section id="sources" class="panel hidden">
+<div class="card"><h2>Reguli de verificare a datelor</h2><ul><li>Folosește documentația oficială a producătorului sau o bază de date licențiată.</li><li>Înregistrează codul motor, anul și configurația exactă.</li><li>Nu marca o procedură ca verificată fără sursă identificabilă.</li><li>Nu copia în masă conținut din servicii comerciale fără permisiune.</li><li>Valorile introduse de utilizator nu sunt validate automat de program.</li></ul><h3>Surse de pornire</h3><p><a href="https://www.autodata-group.com/ro/" target="_blank" rel="noopener">Autodata România</a> — informații comerciale de service și reparații.</p><p><a href="https://www.nhtsa.gov/vin-decoder" target="_blank" rel="noopener">NHTSA VIN Decoder</a> — identificare de bază pentru vehiculele acoperite de baza SUA; nu oferă toate cuplurile de reparații.</p><p class="muted">Pentru o versiune publicată online cu date comune între dispozitive, este necesar să configurăm un server și o bază de date securizată. Nu introduce date sensibile în acest prototip.</p></div>
+</section>
+<div class="footer">Atelier Auto · Versiune demonstrativă 0.1 · Datele tehnice trebuie confirmate din documentație autorizată.</div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const load=k=>{try{return JSON.parse(localStorage.getItem(k)||'[]')}catch{return[]}};
+const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+let vehicles=load('aa_vehicles'), procedures=load('aa_procedures');
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('hidden',p.id!==b.dataset.tab));}));
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function stats(){$('vehicleCount').textContent=vehicles.length;$('procedureCount').textContent=procedures.length;$('verifiedCount').textContent=procedures.filter(p=>p.status==='verified').length}
+function renderVehicles(){$('vehicleList').innerHTML=vehicles.length?vehicles.map(v=>`<div class="result"><h3>${esc(v.make)} ${esc(v.model)} ${esc(v.year)}</h3><div class="muted">Motor: ${esc(v.engine||'—')} · ${esc(v.power||'—')} CP · ${esc(v.transmission||'—')}</div><div class="muted">VIN: ${esc(v.vin||'—')}</div><div>${esc(v.notes||'')}</div><div class="actions"><button class="btn secondary smallbtn" onclick="editVehicle('${v.id}')">Editează</button><button class="btn danger smallbtn" onclick="deleteVehicle('${v.id}')">Șterge</button></div></div>`).join(''):'<div class="empty">Nu ai salvat încă vehicule.</div>'}
+function renderProcedures(){$('procedureList').innerHTML=procedures.length?procedures.map(p=>`<div class="result"><h3>${esc(p.title)}</h3><div><b>${esc(p.make)} ${esc(p.model)} ${esc(p.year)} · ${esc(p.engine||'')}</b></div><div>Cuplu: ${esc(p.torque||'necompletat')} Nm · Unghi: ${esc(p.angle||'necompletat')}</div><p>${esc(p.steps||'Fără pași introduși.')}</p><div class="muted">Sursă: ${esc(p.source)}</div><span class="tag ${p.status==='verified'?'ok':''}">${p.status==='verified'?'Verificat de utilizator':'Neverificat'}</span><div class="actions"><button class="btn secondary smallbtn" onclick="editProcedure('${p.id}')">Editează</button><button class="btn danger smallbtn" onclick="deleteProcedure('${p.id}')">Șterge</button></div></div>`).join(''):'<div class="empty">Nu ai salvat încă proceduri. Nu sunt incluse valori tehnice inventate.</div>'}
+function refresh(){save('aa_vehicles',vehicles);save('aa_procedures',procedures);stats();renderVehicles();renderProcedures()}
+$('vehicleForm').addEventListener('submit',e=>{e.preventDefault();let id=$('vehicleId').value||crypto.randomUUID();let v={id,make:$('make').value.trim(),model:$('model').value.trim(),year:$('year').value,engine:$('engine').value.trim(),power:$('power').value.trim(),transmission:$('transmission').value.trim(),vin:$('vin').value.trim(),notes:$('vehicleNotes').value.trim()};let i=vehicles.findIndex(x=>x.id===id);if(i>=0)vehicles[i]=v;else vehicles.push(v);refresh();$('vehicleForm').reset();$('vehicleId').value='';alert('Vehicul salvat în acest browser.');});
+$('resetVehicle').onclick=()=>{$('vehicleForm').reset();$('vehicleId').value=''};
+window.editVehicle=id=>{let v=vehicles.find(x=>x.id===id);if(!v)return;Object.entries({vehicleId:'id',make:'make',model:'model',year:'year',engine:'engine',power:'power',transmission:'transmission',vin:'vin',vehicleNotes:'notes'}).forEach(([field,key])=>$(field).value=v[key]||'');document.querySelector('[data-tab="vehicles"]').click();window.scrollTo({top:0,behavior:'smooth'})};
+window.deleteVehicle=id=>{if(confirm('Ștergi vehiculul?')){vehicles=vehicles.filter(v=>v.id!==id);refresh()}};
+$('procedureForm').addEventListener('submit',e=>{e.preventDefault();let id=$('procedureId').value||crypto.randomUUID();let p={id,make:$('pMake').value.trim(),model:$('pModel').value.trim(),year:$('pYear').value,engine:$('pEngine').value.trim(),title:$('pTitle').value.trim(),torque:$('pTorque').value.trim(),angle:$('pAngle').value.trim(),steps:$('pSteps').value.trim(),source:$('pSource').value.trim(),status:$('pStatus').value,notes:$('pNotes').value.trim()};let i=procedures.findIndex(x=>x.id===id);if(i>=0)procedures[i]=p;else procedures.push(p);refresh();$('procedureForm').reset();$('procedureId').value='';alert('Procedură salvată. Verifică sursa înainte de folosirea la reparație.');});
+$('resetProcedure').onclick=()=>{$('procedureForm').reset();$('procedureId').value=''};
+window.editProcedure=id=>{let p=procedures.find(x=>x.id===id);if(!p)return;Object.entries({procedureId:'id',pMake:'make',pModel:'model',pYear:'year',pEngine:'engine',pTitle:'title',pTorque:'torque',pAngle:'angle',pSteps:'steps',pSource:'source',pStatus:'status',pNotes:'notes'}).forEach(([field,key])=>$(field).value=p[key]||'');document.querySelector('[data-tab="procedures"]').click();window.scrollTo({top:0,behavior:'smooth'})};
+window.deleteProcedure=id=>{if(confirm('Ștergi procedura?')){procedures=procedures.filter(p=>p.id!==id);refresh()}};
+$('searchBtn').onclick=()=>{let criteria={make:$('qMake').value,model:$('qModel').value,year:$('qYear').value,engine:$('qEngine').value,term:$('qTerm').value};let matches=procedures.filter(p=>[p.make,p.model,p.year,p.engine,p.title,p.steps,p.notes].join(' ').toLowerCase().includes(criteria.term.toLowerCase())&&(!criteria.make||p.make.toLowerCase().includes(criteria.make.toLowerCase()))&&(!criteria.model||p.model.toLowerCase().includes(criteria.model.toLowerCase()))&&(!criteria.year||p.year.includes(criteria.year))&&(!criteria.engine||p.engine.toLowerCase().includes(criteria.engine.toLowerCase())));$('searchResults').innerHTML=matches.length?matches.map(p=>`<div class="result"><h3>${esc(p.title)}</h3><div><b>${esc(p.make)} ${esc(p.model)} ${esc(p.year)} · ${esc(p.engine)}</b></div><div>Cuplu: ${esc(p.torque||'necompletat')} Nm · Unghi: ${esc(p.angle||'necompletat')}</div><p>${esc(p.steps||'Fără pași introduși.')}</p><div class="muted">Sursă: ${esc(p.source)}</div><span class="tag ${p.status==='verified'?'ok':''}">${p.status==='verified'?'Verificat de utilizator':'Neverificat — verifică înainte de utilizare'}</span></div>`).join(''):'<div class="empty">Nu s-au găsit proceduri înregistrate pentru criteriile introduse.</div>'};
+$('clearSearch').onclick=()=>{['qMake','qModel','qYear','qEngine','qTerm'].forEach(id=>$(id).value='');$('searchResults').innerHTML='<div class="empty">Introdu un criteriu și apasă „Caută”.</div>'};
+refresh();
+</script>
+</body></html>
